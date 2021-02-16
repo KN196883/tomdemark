@@ -17,7 +17,7 @@ def get_ohlc_as_pd(ticker, days=365):
     with tempfile.NamedTemporaryFile() as f:
         f.write(requests.get(url).content)
         df = pd.read_csv(f.name)
-    return df.iloc[::-1]
+    return df
 
 
 def get_tdsequential(data, datefmt='%Y-%m-%d', toShow=0):
@@ -26,10 +26,10 @@ def get_tdsequential(data, datefmt='%Y-%m-%d', toShow=0):
     logging.info('TDシーケンシャル計算中...')
     logging.info(f'datefmtが"{datefmt}"であることを確認してください')
 
-    o=[data.iloc[j]['Open'] for j in range(0, len(data))]
-    h=[data.iloc[j]['High'] for j in range(0, len(data))]
-    l=[data.iloc[j]['Low'] for j in range(0, len(data))]
-    c=[data.iloc[j]['Close'] for j in range(0, len(data))]
+    o=[float(data.iloc[j]['Open']) for j in range(0, len(data))]
+    h=[float(data.iloc[j]['High']) for j in range(0, len(data))]
+    l=[float(data.iloc[j]['Low']) for j in range(0, len(data))]
+    c=[float(data.iloc[j]['Close']) for j in range(0, len(data))]
     t=[datetime.strptime(data.iloc[j]['Date'], datefmt) for j in range(0, len(data))]
 
     shortVal=[]
