@@ -5,10 +5,14 @@ app = Flask(__name__, static_folder='graphs')
 
 @app.route('/tomdemark')
 def draw_demark():
-	htmltext = '''
+	with open('last_originated_datetime.txt', 'r') as f:
+		last_originated_datetime = f.read()
+	htmltext = f'''
 		<html>
 		<head></head>
 		<body>
+		最終更新: {last_originated_datetime}<br>
+		<small>自分向け注意: ローカルで実行している場合、-9時間</small>
 	'''
 	for ticker, name in zip(tickers, names):
 		htmltext += f'''
