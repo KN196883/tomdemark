@@ -128,7 +128,7 @@ def plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal,
 
     padding = (max(h) - min(l)) * 0.08
 
-    fig, ax = plt.subplots(1,1, figsize=(15,7), dpi=300)
+    fig, ax = plt.subplots(1,1, figsize=(17,5), dpi=300)
     fig.set_facecolor('white')
     ax.set_facecolor('k')
 
