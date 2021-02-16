@@ -205,7 +205,7 @@ def plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal,
     ax.set_ylim(min(l) - 0.1 * (max(h) - min(l)),
                 max(h) + 0.1 * (max(h) - min(l)))
     ax.set_ylabel(ylabel)
-    ax.grid(color='101010')
+    ax.grid(color='#222222')
 
     if figshow:
         plt.show()
