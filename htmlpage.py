@@ -10,10 +10,10 @@ def draw_demark():
 		<head></head>
 		<body>
 	'''
-	for name in names:
+	for ticker, name in zip(tickers, names):
 		htmltext += f'''
-			<h2>{name}</h2>
-			<img src="graphs/{name}.png", width=100%>
+			<h2><a href="https://finance.yahoo.com/quote/{ticker}">{name}</a></h2>
+			<img src="/graphs/{name}.png", width=100%>
 		'''
 	htmltext += '''
 		</body>
