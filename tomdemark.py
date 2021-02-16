@@ -1,7 +1,30 @@
-def get_tdsequential(data, toShow=0):
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter
+import requests
+import pandas as pd
+from datetime import datetime, timedelta
+import logging
+import tempfile
+logging.basicConfig(level=logging.INFO,
+                    format='%(levelname)s : %(asctime)s : %(message)s',
+                    )
+
+
+def get_ohlc_as_pd(ticker, days=365):
+    period2 = int((datetime.now() + timedelta(days=1)).timestamp())
+    period1 = int((datetime.now() - timedelta(days=days)).timestamp())
+    url = f'https://query1.finance.yahoo.com/v7/finance/download/{ticker}?period1={period1}&period2={period2}&interval=1d&events=history&includeAdjustedClose=true'
+    with tempfile.NamedTemporaryFile() as f:
+        f.write(requests.get(url).content)
+        df = pd.read_csv(f.name)
+    return df.iloc[::-1]
+
+
+def get_tdsequential(data, datefmt='%Y-%m-%d', toShow=0):
     if toShow == 0:
         toShow = len(data)
     logging.info('TDシーケンシャル計算中...')
+    logging.info(f'datefmtが"{datefmt}"であることを確認してください')
 
     o=[data.iloc[j]['Open'] for j in range(0, len(data))]
     h=[data.iloc[j]['High'] for j in range(0, len(data))]
@@ -99,7 +122,8 @@ def get_tdsequential(data, toShow=0):
     return t, o, h, l, c, shortVal, longVal, sellVal, buyVal
 
 
-def plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal, savefigname=None):
+def plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal, 
+               ylabel='', figshow=False, savefigname=None):
     logging.info('プロット中...')
 
     padding = (max(h) - min(l)) * 0.08
@@ -180,7 +204,11 @@ def plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal, savefigname=No
                  r'dark green/red: countdown ($\geq$ 13 implicates end of long-term trend)');
     ax.set_ylim(min(l) - 0.1 * (max(h) - min(l)),
                 max(h) + 0.1 * (max(h) - min(l)))
-    plt.show()
+    ax.set_ylabel(ylabel)
+    ax.grid(color='101010')
+
+    if figshow:
+        plt.show()
     if savefigname is not None:
         fig.savefig(savefigname)
         

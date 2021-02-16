@@ -1,0 +1,5 @@
+confidential.py
+*.ipynb
+*.pyc
+*.csv
+*.png
