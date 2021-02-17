@@ -1,0 +1,6 @@
+confidential.py
+*.ipynb
+*.pyc
+*.csv
+*.png
+last_originated_datetime.txt
