@@ -10,14 +10,16 @@ logging.basicConfig(level=logging.INFO,
                     )
 
 while True:
-	# for ticker, name in zip(tickers, names):
+	with open('last_originated_datetime.txt', 'w') as f:
+		f.write((datetime.now() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S"))
+
 	for name, invcom_id in wanted_investingcom_ids.items():
 		logging.info(f'start drawing of "{name}"...')
 		try:
 			df = get_historical(
 					invcom_id,
 					to_date=datetime.now()+timedelta(days=1),
-					from_date=datetime.now()-timedelta(days=365),
+					from_date=datetime.now()-timedelta(days=180),
 					date_str_fmt='%Y-%m-%d'
 				 )
 			t, o, h, l, c, shortVal, longVal, sellVal, buyVal = tomdemark.get_tdsequential(df)
@@ -29,8 +31,6 @@ while True:
 			continue
 		sleep(1)
 
-	with open('last_originated_datetime.txt', 'w') as f:
-		f.write((datetime.now() + timedelta(hours=9)).strftime("%Y-%m-%d %H:%M:%S"))
 
 	# 3時間待機する
 	logging.info('3時間待機します...')
