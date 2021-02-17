@@ -75,10 +75,10 @@ def get_historical(id_,
         else:
             appended = datetime.strptime(record_list[0].text, '%b %d, %Y').strftime(date_str_fmt)
             dates.append(appended)
-        c.append(float(record_list[1].text))
-        o.append(float(record_list[2].text))
-        h.append(float(record_list[3].text))
-        l.append(float(record_list[4].text))
+        c.append(float(record_list[1].text.replace(',', '')))
+        o.append(float(record_list[2].text.replace(',', '')))
+        h.append(float(record_list[3].text.replace(',', '')))
+        l.append(float(record_list[4].text.replace(',', '')))
     df = pandas.DataFrame({
         'Date': dates,
         'Open': o,
