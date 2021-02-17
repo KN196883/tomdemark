@@ -1,6 +1,7 @@
 import logging
 import tomdemark
-from specify_what_to_make import tickers, names
+from specify_what_to_make import wanted_investingcom_ids
+from investingcom_scraper import get_historical
 from datetime import datetime, timedelta
 import logging
 from time import sleep
@@ -9,15 +10,22 @@ logging.basicConfig(level=logging.INFO,
                     )
 
 while True:
-	for ticker, name in zip(tickers, names):
-		logging.info(f'start drawing of "{ticker}"...')
+	# for ticker, name in zip(tickers, names):
+	for name, invcom_id in wanted_investingcom_ids.items():
+		logging.info(f'start drawing of "{name}"...')
 		try:
-			df = tomdemark.get_ohlc_as_pd(ticker, days=365)
+			df = get_historical(
+					invcom_id,
+					to_date=datetime.now()+timedelta(days=1),
+					from_date=datetime.now()-timedelta(days=365),
+					date_str_fmt='%Y-%m-%d'
+				 )
 			t, o, h, l, c, shortVal, longVal, sellVal, buyVal = tomdemark.get_tdsequential(df)
 			tomdemark.plot_tdseq(t, o, h, l, c, shortVal, longVal, sellVal, buyVal, 
 			                     ylabel=name, figshow=False, savefigname=f'./graphs/{name}.png')
-		except Exception:
-			logging.error(f'Error occured in ticker "{ticker}". will pass and continue...')
+		except Exception as e:
+			logging.error(f'Error occured in "{name}". will pass and continue...')
+			logging.error(e)
 			continue
 		sleep(1)
 
