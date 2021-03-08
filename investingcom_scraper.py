@@ -33,11 +33,23 @@ def search_id_candidates(query):
 def get_historical(id_,
                    from_date, to_date,
                    interval='Daily',
-                   date_str_fmt=None
+                   date_str_fmt=None,
+                   force_exclude_weekend=False
 ):
     ''' ある商品の四本値をInvesting.comから取得する。
-    id_は、Investing.comで商品を指定するための数字。
-    不明であれば、search_id_candidates()関数で探して見当をつけよう。
+    ====
+    Args:
+        id_ (int): Investing.comで商品を指定するための数字
+              不明であれば、search_id_candidates()関数で探して見当をつけよう
+        from_date (datetime.datetime)
+        to_date (datetime.datetime)
+        interval (str)
+        date_str_fmt (str)
+        force_exclude_weekend (bool): 
+            investing.comのデータになぜか休日のオープンしていないときのデータが
+            入っていることがある。その場合、この引数をTrueに指定することによって
+            強制的に土日を外すことができる。
+            ※土日以外の祝日を強制排除することは現状できない  # FIXME
     '''
     params = {
         "curr_id": id_,
@@ -86,6 +98,9 @@ def get_historical(id_,
         'Low': l,
         'Close': c
     })
+
+    if force_exclude_weekend:
+        df = df[(df['Date'].dt.dayofweek != 5) & (df['Date'].dt.dayofweek != 6)]
 
     return df.iloc[::-1]
 
