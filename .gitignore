@@ -1,5 +1,6 @@
 confidential.py
 *.ipynb
+!HowToUse.ipynb
 *.pyc
 *.csv
 *.png
