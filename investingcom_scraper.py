@@ -34,7 +34,8 @@ def get_historical(id_,
                    from_date, to_date,
                    interval='Daily',
                    date_str_fmt=None,
-                   force_exclude_weekend=False
+                   force_exclude_weekend=False,
+                   dateCol_be_str=False
 ):
     ''' ある商品の四本値をInvesting.comから取得する。
     ====
@@ -101,6 +102,9 @@ def get_historical(id_,
 
     if force_exclude_weekend:
         df = df[(df['Date'].dt.dayofweek != 5) & (df['Date'].dt.dayofweek != 6)]
+
+    if dateCol_be_str:
+        df['Date'] = df['Date'].astype('str')
 
     return df.iloc[::-1]
 

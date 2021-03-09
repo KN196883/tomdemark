@@ -24,13 +24,21 @@ def get_tdsequential(data, datefmt='%Y-%m-%d', toShow=0):
     if toShow == 0:
         toShow = len(data)
     logging.info('TDシーケンシャル計算中...')
-    logging.info(f'datefmtが"{datefmt}"であることを確認してください')
+    if type(datefmt) == str:
+        logging.info(f'datefmtが"{datefmt}"であることを確認してください')
+    elif datefmt is None:
+        logging.info('data中の日付列がdatetime型であることを確認してください')
+    else:
+        logging.warning(f'datefmt "{datefmt}"は文字列かNoneでなければいけません')
 
     o=[float(data.iloc[j]['Open']) for j in range(0, len(data))]
     h=[float(data.iloc[j]['High']) for j in range(0, len(data))]
     l=[float(data.iloc[j]['Low']) for j in range(0, len(data))]
     c=[float(data.iloc[j]['Close']) for j in range(0, len(data))]
-    t=[datetime.strptime(data.iloc[j]['Date'], datefmt) for j in range(0, len(data))]
+    if type(datefmt) == str:
+        t=[datetime.strptime(data.iloc[j]['Date'], datefmt) for j in range(0, len(data))]
+    elif datefmt is None:
+        t=[data.iloc[j] for j in range(0, len(data))]
 
     shortVal=[]
     longVal =[]
