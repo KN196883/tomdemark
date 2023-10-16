@@ -84,10 +84,9 @@ def get_historical(id_,
         record_list = record.select('td')
         if date_str_fmt is None:
             appended = datetime.strptime(record_list[0].text, '%b %d, %Y')
-            dates.append(appended)
         else:
             appended = datetime.strptime(record_list[0].text, '%b %d, %Y').strftime(date_str_fmt)
-            dates.append(appended)
+        dates.append(appended)
         c.append(float(record_list[1].text.replace(',', '')))
         o.append(float(record_list[2].text.replace(',', '')))
         h.append(float(record_list[3].text.replace(',', '')))
